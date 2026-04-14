@@ -11,6 +11,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "TP2_EloisaGleiser.h"
+#include "Interfaces/InteractInterface.h"
 
 ATP2_EloisaGleiserCharacter::ATP2_EloisaGleiserCharacter()
 {
@@ -50,6 +51,7 @@ ATP2_EloisaGleiserCharacter::ATP2_EloisaGleiserCharacter()
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
 
+
 void ATP2_EloisaGleiserCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	// Set up action bindings
@@ -65,6 +67,9 @@ void ATP2_EloisaGleiserCharacter::SetupPlayerInputComponent(UInputComponent* Pla
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ATP2_EloisaGleiserCharacter::Look);
+		
+		// Interact
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &ATP2_EloisaGleiserCharacter::InteractOtherActor);
 	}
 	else
 	{
@@ -130,4 +135,24 @@ void ATP2_EloisaGleiserCharacter::DoJumpEnd()
 {
 	// signal the character to stop jumping
 	StopJumping();
+}
+
+void ATP2_EloisaGleiserCharacter::NotifyActorBeginOverlap(AActor* OtherActor)
+{
+	Super::NotifyActorBeginOverlap(OtherActor);
+	OverlapActor=OtherActor;
+}
+
+void ATP2_EloisaGleiserCharacter::NotifyActorEndOverlap(AActor* OtherActor)
+{
+	Super::NotifyActorEndOverlap(OtherActor);
+	OverlapActor=nullptr;
+}
+
+void ATP2_EloisaGleiserCharacter::InteractOtherActor()
+{
+	if (OverlapActor && OverlapActor->Implements <UInteractInterface>())
+	{
+		IInteractInterface::Execute_Interact(OverlapActor, this);
+	}
 }

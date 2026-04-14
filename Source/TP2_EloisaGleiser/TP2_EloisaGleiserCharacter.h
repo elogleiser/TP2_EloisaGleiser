@@ -48,16 +48,25 @@ protected:
 	/** Mouse Look Input Action */
 	UPROPERTY(EditAnywhere, Category="Input")
 	UInputAction* MouseLookAction;
+	
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputAction* InteractAction;
 
 public:
 
 	/** Constructor */
 	ATP2_EloisaGleiserCharacter();	
+	
+	UFUNCTION()
+	void InteractOtherActor();
 
 protected:
 
 	/** Initialize input action bindings */
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor);
+	virtual void NotifyActorEndOverlap(AActor* OtherActor);
 
 protected:
 
@@ -92,5 +101,9 @@ public:
 
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+private:
+	UPROPERTY()
+	TObjectPtr<AActor> OverlapActor;
 };
 
