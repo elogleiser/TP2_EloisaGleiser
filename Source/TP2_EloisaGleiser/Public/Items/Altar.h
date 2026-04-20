@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Public/Interfaces/InteractInterface.h"
 #include "Components/BoxComponent.h"
+#include "Componentes/ActivacionComponent.h"
 #include "Altar.generated.h"
 
 UCLASS()
@@ -28,6 +29,9 @@ public:
 	UFUNCTION()
 	virtual void Interact_Implementation(AActor* Actor) override; 
 	
+	UFUNCTION()
+	UActivacionComponent* GetActivationComponent() const;
+	
 private:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Components", meta = (AllowPrivateAccess = "true"))
@@ -35,4 +39,7 @@ private:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Components", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UStaticMeshComponent> Mesh;
+	
+    UPROPERTY(VisibleAnywhere)
+    TObjectPtr<UActivacionComponent> ActivationComponent;
 };

@@ -17,6 +17,11 @@ AAltar::AAltar()
 	
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
 	Mesh->SetupAttachment(RootComponent);
+	BoxCollision->SetLineThickness(5);
+	BoxCollision->SetBoxExtent(FVector(150.0f, 150.0f, 150.0f));
+	BoxCollision->SetHiddenInGame(false);
+	
+	ActivationComponent = CreateDefaultSubobject<UActivacionComponent>(TEXT("ActivationComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -34,6 +39,14 @@ void AAltar::Tick(float DeltaTime)
 
 void AAltar::Interact_Implementation(AActor* Actor)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Interact_Implementation"));
+	if (ActivationComponent)
+	{
+		ActivationComponent->ComenzarActivacion();
+	}
+}
+
+UActivacionComponent* AAltar::GetActivationComponent() const
+{
+	return ActivationComponent;
 }
 

@@ -58,7 +58,7 @@ public:
 	ATP2_EloisaGleiserCharacter();	
 	
 	UFUNCTION()
-	void InteractOtherActor();
+	void InteractOtherActor();//interaccion
 
 protected:
 
